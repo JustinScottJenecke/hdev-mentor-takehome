@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors';
 import mongoose, { Error } from "mongoose";
 import UserSchema from "./models/User.js";
+import jwt from "jsonwebtoken";
 // import userModel from "./models/User.js";
 
 const APP = express();
@@ -41,15 +42,21 @@ APP.post("/api/users/login", async (req, res) => {
     const loginUserDto = {name: req.body.name, password: req.body.password};
     const user = await UserSchema.findOne(loginUserDto);
 
-    if(user)
-        res.status(200).json({user: true})
-    else {
+    if(user) {
+
+        const authToken = jwt.sign({
+            name: user.name,
+            email: user.email,
+            // password: user.password - security risk
+        }, 'mock-secret');
+
+        res.status(200).json({msg: 'success', auth: authToken})
+
+    } else {
         console.error('user not found.');
         console.error(user);
-        res.status(400).json({user: false});           
+        res.status(400).json({msg: "authentication error..", auth: null});           
     }
-        
-
 });
 
 APP.listen(8888, () => {
