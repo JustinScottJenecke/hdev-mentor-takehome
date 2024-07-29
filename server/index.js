@@ -38,13 +38,17 @@ APP.post("/api/users/register", async (req, res) => {
 // Read by through DTO
 APP.post("/api/users/login", async (req, res) => {
 
-    const loginUserDto = {username: req.body.name, password: req.body.password};
+    const loginUserDto = {name: req.body.name, password: req.body.password};
     const user = await UserSchema.findOne(loginUserDto);
 
-    user ? 
+    if(user)
         res.status(200).json({user: true})
-    : 
-       console.error('user not found.'), res.status(400).json({user: false});           
+    else {
+        console.error('user not found.');
+        console.error(user);
+        res.status(400).json({user: false});           
+    }
+        
 
 });
 
