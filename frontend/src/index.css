@@ -66,3 +66,19 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+li {
+  list-style: none;
+}
+
+.equipment-card {
+  border-radius: 7px;
+  padding: 0.5rem;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.652);
+}
+
+.inventory-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6rem;
+}

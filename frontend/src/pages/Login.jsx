@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import '../App.css'
+import { redirect, useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const loginUser = async (e) => {
 
@@ -21,9 +23,18 @@ const Login = () => {
       })
     });
 
-    const data = await res.json();
+    const result = await res.json();
 
-    console.log(data)
+    if (result.auth) {
+      alert("Welcome back " + name);
+      navigate('/');
+
+    } else {
+      alert("Invalid username or password. Please check your login details.");
+      // navigate(0);
+    }
+
+    console.log(result)
   }
 
   return (
