@@ -1,28 +1,35 @@
-// import express from "express";
-// const APP = express();
+/**
+ * Request middleware for validating whether a username by checking wheher it contains
+ * any inappropriate words or not. Returns a feedback flag to client so client knows error message
+ * can be used as feedback to client
+ * 
+ * @param {*} req request object
+ * @param {*} res response object
+ * @param {*} next next middleware to be called
+ * @returns 
+ */
+const usernameValidator = (req, res, next) => {
 
-// APP.use(express.json());
+    let valid = true;
 
-// /**
-//  * Application middleware to validate whether a RegisterUserDto username 
-//  * contains any inappropriate words.
-//  * @param {*} req - request object
-//  * @param {*} res - response object
-//  * @param {*} next - next middleware in stack
-//  */
-// const usernameValidator = (req, res, next) => {
+    const inappropriateWords = [
+        "toy", "blind", "melon", "butt", "clown", "head", "gum", "ball", "smashing", "pumpkin"
+    ];
 
-//     const inappropriateWords = [
-//         "toy","blind","melon","butt","clown",
-//         "head","gum","ball","smashing","pumpkin"
-//     ];
+    inappropriateWords.forEach(word => {
+        if (req.body.name.includes(word)) {
+            valid = false;
+            return;
+        }
+    })
 
-//     inappropriateWords.forEach(word => {
-//         if(req.body.name.includes(word))
-//             res.status(400).json({error: "use of inappropriate word in username."})
-//         else
-//             next();
-//     });
-// }
+    if (valid) {
+        next();
+        return;
+    }
 
-// export default usernameValidator;
+    console.error("use of inappropriate word in username.");
+    res.status(400).json({ error: "use of inappropriate word in username.", feedback: true });
+}
+
+export default usernameValidator;

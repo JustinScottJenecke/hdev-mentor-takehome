@@ -3,7 +3,7 @@ import cors from 'cors';
 import mongoose, { Error } from "mongoose";
 import UserSchema from "./models/User.js";
 import jwt from "jsonwebtoken";
-// import usernameValidator from "./middleware/username-validator.js";
+import usernameValidator from "./middleware/username-validator.js";
 // import userModel from "./models/User.js";
 
 const APP = express();
@@ -15,31 +15,8 @@ APP.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/hdev-mentor-takehome');
 
-const usernameValidator = (req, res, next) => {
 
-    let valid = true;
-
-    const inappropriateWords = [
-        "toy","blind","melon","butt","clown","head","gum","ball","smashing","pumpkin"
-    ];
-
-    inappropriateWords.forEach(word => {  
-        if( req.body.name.includes(word)) {
-            valid = false;
-            return;
-        } 
-    })
-
-    if(valid) {
-        next();
-        return;
-    } 
-
-    console.error("use of inappropriate word in username.");
-    res.status(400).json({error: "use of inappropriate word in username.", feedback: true});
-}
-
-// --- endpoints ---
+// --- endpoint actions ---
 
 APP.get("/", (req, res) => {
     res.send('hello world');
