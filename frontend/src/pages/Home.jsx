@@ -3,7 +3,6 @@ import '../App.css'
 import EquipmentCard from '../components/EquipmentCard';
 import { useNavigate } from 'react-router-dom';
 // import { useJwt } from "react-jwt";
-// import jwt from "jsonwebtoken";
 import { jwtDecode } from "jwt-decode";
 
 
