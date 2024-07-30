@@ -3,6 +3,7 @@ import cors from 'cors';
 import mongoose, { Error } from "mongoose";
 import UserSchema from "./models/User.js";
 import jwt from "jsonwebtoken";
+// import usernameValidator from "./middleware/username-validator.js";
 // import userModel from "./models/User.js";
 
 const APP = express();
@@ -14,6 +15,30 @@ APP.use(express.json());
 
 mongoose.connect('mongodb://localhost:27017/hdev-mentor-takehome');
 
+const usernameValidator = (req, res, next) => {
+
+    let valid = true;
+
+    const inappropriateWords = [
+        "toy","blind","melon","butt","clown","head","gum","ball","smashing","pumpkin"
+    ];
+
+    inappropriateWords.forEach(word => {  
+        if( req.body.name.includes(word)) {
+            valid = false;
+            return;
+        } 
+    })
+
+    if(valid) {
+        next();
+        return;
+    } 
+
+    console.error("use of inappropriate word in username.");
+    res.status(400).json({error: "use of inappropriate word in username.", feedback: true});
+}
+
 // --- endpoints ---
 
 APP.get("/", (req, res) => {
@@ -21,12 +46,13 @@ APP.get("/", (req, res) => {
 })
 
 // Create 
-APP.post("/api/users/register", async (req, res) => {
+APP.post("/api/users/register", usernameValidator, async (req, res) => {
+
     console.log(req.body);
-    const newUserDto = {name: req.body.name, email: req.body.email, password: req.body.password};
+    const RegisterUserDto = {name: req.body.name, email: req.body.email, password: req.body.password};
 
     try {
-        const user = await UserSchema.create(newUserDto);
+        const user = await UserSchema.create(RegisterUserDto);
         // res.send(user);
         res.status(201).json(user);            
     
@@ -58,6 +84,9 @@ APP.post("/api/users/login", async (req, res) => {
         res.status(400).json({msg: "authentication error..", auth: null});           
     }
 });
+
+
+// --- run
 
 APP.listen(8888, () => {
     console.log('started on port 8888');

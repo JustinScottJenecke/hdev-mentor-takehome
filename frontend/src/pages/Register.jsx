@@ -25,6 +25,9 @@ const Register = () => {
 
     const data = await res.json();
 
+    if (data.feedback) {
+      alert(data.error);
+    }
     // setName(''); setEmail(''); setPassword();
     console.log(data)
   }
