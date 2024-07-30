@@ -39,14 +39,14 @@ const Register = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
+        <br />
         <input 
           type='email' 
           placeholder='Enter new email..' 
           value={email}
           onChange={(e) => setEmail(e.target.value)} 
         />
-
+        <br />
         <input 
           type="password" 
           placeholder='Enter new password..'

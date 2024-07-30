@@ -27,7 +27,9 @@ const Login = () => {
 
     if (result.auth) {
       alert("Welcome back " + name);
-      navigate('/');
+      localStorage.setItem('hdev-mt-auth-token', result.auth);
+      if(true)
+        navigate('/');
 
     } else {
       alert("Invalid username or password. Please check your login details.");
@@ -47,7 +49,7 @@ const Login = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
+        <br />
         <input 
           type="password" 
           placeholder='Enter new password..'
